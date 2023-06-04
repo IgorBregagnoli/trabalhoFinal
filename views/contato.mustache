@@ -9,11 +9,54 @@
         <br>
         {{titulo}}
         <main class="main-container">
-            Criar uma página de contato, no qual será possível enviar uma mensagem (por email) para os
-            desenvolvedores da ferramenta. Os campos obrigatórios são nome, e-mail, assunto e mensagem
-            (pesquisar sobre como enviar emails)
+            Entre em contato conosco jovem aventureiro
+            <br>
+            <form id="formulario-contato" METHOD="post" ACTION="/contato">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" required>
+                <br>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required>
+                <br>
+                <label for="assunto">Assunto</label>
+                <input type="text" id="assunto" name="assunto" required>
+                <br>
+                <label for="mensagem">Mensagem</label>
+                <textarea id="mensagem" name="mensagem" required></textarea>
+                <br>
+                <input type="submit" value="Enviar">
+            </form>
         </main>
         <br>
         {{> footer}}
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            document.getElementById('formulario-contato').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                var nome = document.getElementById('nome').value;
+                var email = document.getElementById('email').value;
+                var assunto = document.getElementById('assunto').value;
+                var mensagem = document.getElementById('mensagem').value;
+
+                var data = {
+                    nome: nome,
+                    email: email,
+                    assunto: assunto,
+                    mensagem: mensagem
+                };
+
+                axios.post('/contato', data).then(function(response) {
+                    if (response.data.success) {
+                        alert('E-mail enviado com sucesso!');
+                    } else {
+                        alert('Erro ao enviar o e-mail.');
+                    }
+                }).catch(function(error) {
+                    console.error(error);
+                    alert('Erro ao enviar o e-mail.');
+                });
+            });
+        </script>
     </body>
 </html>

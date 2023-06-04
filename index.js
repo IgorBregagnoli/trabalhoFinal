@@ -1,4 +1,5 @@
 const express = require("express");
+const nodemailer = require('nodemailer');
 const app = express();
 const port = 3000;
 const path = require('path');
@@ -11,13 +12,13 @@ app.engine("mustache", engine);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "mustache");
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
     args = {
         'titulo': 'Página Inicial',
-        'header': 'Música Hoje',
+        'header': 'D20',
         'footer': 'Todos os direitos a um 10 reservados'
     }
 
@@ -27,7 +28,7 @@ app.get("/", (req, res) => {
 app.get("/descricao", (req, res) => {
     args = {
         'titulo': 'Página de Descrição',
-        'header': 'Música Hoje',
+        'header': 'D20',
         'footer': 'Todos os direitos a um 10 reservados'
     }
 
@@ -37,7 +38,7 @@ app.get("/descricao", (req, res) => {
 app.get("/tecnologia", (req, res) => {
     args = {
         'titulo': 'Página de Tecnologias',
-        'header': 'Música Hoje',
+        'header': 'D20',
         'footer': 'Todos os direitos a um 10 reservados'
     }
 
@@ -47,7 +48,7 @@ app.get("/tecnologia", (req, res) => {
 app.get("/desenvolvedor", (req, res) => {
     args = {
         'titulo': "Página de Desenvolvedor",
-        'header': 'Música Hoje',
+        'header': 'D20',
         'footer': 'Todos os direitos a um 10 reservados'
     }
 
@@ -57,11 +58,41 @@ app.get("/desenvolvedor", (req, res) => {
 app.get("/contato", (req, res) => {
     args = {
         'titulo': "Página de Contatos",
-        'header': 'Música Hoje',
+        'header': 'D20',
         'footer': 'Todos os direitos a um 10 reservados'
     }
 
     res.render("contato", args);
+});
+
+app.post('/contato', (req, res) => {
+    const {nome, email, assunto, mensagem} = req.body;
+
+    const transporter = nodemailer.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        secure: false,
+        auth: {
+            user: "21bb2a2267068c",
+            pass: "97dee0f50dd65d"
+        },
+    });
+
+    const mailOptions = {
+        from: email,
+        to: "IgorBregagnoli1@gmail.com",
+        subject: assunto,
+        text: `${nome} (${email}) enviou uma mensagem:\n\n${mensagem}`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({ success: false, message: 'Erro ao enviar o e-mail.' });
+        } else {
+            console.log('E-mail enviado:', info.response);
+            res.json({ success: true, message: 'E-mail enviado com sucesso!' });
+        }
+    });
 });
 
 app.listen(port, () => {
