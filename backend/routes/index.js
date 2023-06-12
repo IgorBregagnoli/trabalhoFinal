@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const usuariosRoutes = require("./usuariosRoutes");
-const personagensRoutes = require("./personagensRoutes");
-const habilidadesRoutes = require("./habilidadesRoutes");
-const personagemHabilidadesRoutes = require("./personagemHabilidadesRoutes");
+const usuarioRotas = require("./usuarioRotas");
+const personagemRotas = require("./personagemRotas");
+const habilidadeRotas = require("./habilidadeRotas");
+const personagem_habilidade = require("./personagem_HabilidadesRotas");
 
-router.use("/usuarios", usuariosRoutes);
-router.use("/personagens", personagensRoutes);
-router.use("/habilidades", habilidadesRoutes);
-router.use("/personagem-habilidades", personagemHabilidadesRoutes);
+router.use("/usuarios", usuarioRotas);
+router.use("/personagem", personagemRotas);
+router.use("/habilidade", habilidadeRotas);
+router.use("/personagem_habilidade", personagem_habilidade)
 
 module.exports = router;

@@ -87,10 +87,16 @@ app.post('/contato', (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error(error);
-            res.status(500).json({ success: false, message: 'Erro ao enviar o e-mail.' });
+            res.status(500).json({
+                success: false,
+                message: 'Erro ao enviar o e-mail.'
+            });
         } else {
             console.log('E-mail enviado:', info.response);
-            res.json({ success: true, message: 'E-mail enviado com sucesso!' });
+            res.json({
+                success: true,
+                message: 'E-mail enviado com sucesso!'
+            });
         }
     });
 });
