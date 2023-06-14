@@ -1,8 +1,9 @@
 const express = require("express");
 const {Personagem, Usuario} = require("../models");
 const router = express.Router();
+const passport = require("../auth/auth");
 
-router.get("/", async (req, res) => {
+router.get("/", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const personagens = await Personagem.findAll();
         res.json(personagens);
@@ -13,7 +14,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const personagem = await Personagem.findByPk(id);
@@ -30,7 +31,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.post("/registrar", async (req, res) => {
+router.post("/registrar", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {nome, classe, raca, nivel, usuarioId} = req.body;
         const usuario = await Usuario.findByPk(usuarioId);
@@ -55,7 +56,7 @@ router.post("/registrar", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const {nome, classe, raca, nivel} = req.body;
@@ -84,7 +85,7 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const personagem = await Personagem.findByPk(id);

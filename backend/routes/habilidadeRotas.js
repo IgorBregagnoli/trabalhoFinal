@@ -1,8 +1,9 @@
 const express = require("express");
 const {Habilidade} = require("../models");
 const router = express.Router();
+const passport = require("../auth/auth");
 
-router.get("/", async (req, res) => {
+router.get("/", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const habilidades = await Habilidade.findAll();
         res.json(habilidades);
@@ -13,7 +14,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const habilidade = await Habilidade.findByPk(id);
@@ -31,7 +32,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.post("/registrar", async (req, res) => {
+router.post("/registrar", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {nome, descricao} = req.body;
         const novaHabilidade = await Habilidade.create({
@@ -46,7 +47,7 @@ router.post("/registrar", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const {nome, descricao} = req.body;
@@ -71,7 +72,7 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const habilidade = await Habilidade.findByPk(id);

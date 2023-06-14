@@ -1,8 +1,9 @@
 const express = require("express");
 const {Personagem, Habilidade, Personagem_Habilidades} = require("../models");
 const router = express.Router();
+const passport = require("../auth/auth");
 
-router.get("/", async (req, res) => {
+router.get("/", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const personagemHabilidades = await Personagem_Habilidades.findAll();
         res.json(personagemHabilidades);
@@ -13,7 +14,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/personagem/:id", async (req, res) => {
+router.get("/personagem/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const personagemHabilidades = await Personagem_Habilidades.findAll({
@@ -35,7 +36,7 @@ router.get("/personagem/:id", async (req, res) => {
     }
 });
 
-router.get("/habilidade/:id", async (req, res) => {
+router.get("/habilidade/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const personagemHabilidades = await Personagem_Habilidades.findAll({
@@ -57,7 +58,7 @@ router.get("/habilidade/:id", async (req, res) => {
     }
 });
 
-router.get("/personagem/:id/habilidade/:id2", async (req, res) => {
+router.get("/personagem/:id/habilidade/:id2", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id, id2} = req.params;
         const personagemHabilidades = await Personagem_Habilidades.findAll({
@@ -80,7 +81,7 @@ router.get("/personagem/:id/habilidade/:id2", async (req, res) => {
     }
 });
 
-router.post("/registrar", async (req, res) => {
+router.post("/registrar", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {personagemId, habilidadeId, nivel, escola, componentes, alcance, dano, usoDescanso} = req.body;
         const personagem = await Personagem.findByPk(personagemId);
@@ -115,7 +116,7 @@ router.post("/registrar", async (req, res) => {
     }
 });
 
-router.put("/personagem/:id/habilidade/:id2", async (req, res) => {
+router.put("/personagem/:id/habilidade/:id2", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id, id2} = req.params;
         const {nivel, escola, componentes, alcance, dano, usoDescanso} = req.body;
@@ -153,7 +154,7 @@ router.put("/personagem/:id/habilidade/:id2", async (req, res) => {
     }
 });
 
-router.delete("/personagem/:id/habilidade/:id2", async (req, res) => {
+router.delete("/personagem/:id/habilidade/:id2", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id, id2} = req.params;
         const personagemHabilidades = await Personagem_Habilidades.findOne({

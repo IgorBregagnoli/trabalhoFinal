@@ -1,8 +1,11 @@
 const express = require("express");
 const {Usuario} = require("../models");
 const router = express.Router();
+const passport = require("../auth/auth");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
-router.get("/", async (req, res) => {
+router.get("/", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try{
         const usuarios = await Usuario.findAll();
         res.json(usuarios);
@@ -13,7 +16,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try{
         const {id} = req.params;
         const usuario = await Usuario.findByPk(id);
@@ -39,7 +42,8 @@ router.post("/registrar", async (req, res) => {
             email,
             senha
         });
-        res.json(usuario);
+        const token = jwt.sign({id: usuario.id}, "trabalhoFinal", {expiresIn: "1h"});
+        res.json({usuario, token});
     } catch (error) {
         console.error("Erro ao criar usuário:", error);
         res.status(500).json({
@@ -48,7 +52,29 @@ router.post("/registrar", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.post("/login", async (req, res) => {
+    const {email, senha} = req.body;
+    try {
+        const usuario = await Usuario.findOne({
+            where: {email}
+        });
+        const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+        if(!senhaCorreta){
+            res.status(401).json({
+                error: "Senha Incorreta",
+            });
+            return;
+        }
+        const token = jwt.sign({id: usuario.id}, "trabalhoFinal", {expiresIn: "1h"});
+        res.json({usuario, token});
+    } catch (error) {
+        res.status(500).json({
+            error: "Erro ao autenticar usuário"
+        });
+    }
+});
+
+router.put("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const {nome, email, senha} = req.body;
@@ -75,7 +101,7 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate("jwt", {session: false}), async (req, res) => {
     try {
         const {id} = req.params;
         const usuario = await Usuario.findByPk(id);
