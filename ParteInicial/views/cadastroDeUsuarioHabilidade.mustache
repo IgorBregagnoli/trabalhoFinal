@@ -1,0 +1,61 @@
+<html>
+    <style>
+        .main-container {
+            height: 65vh;
+        }
+    </style>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        {{> header}}
+        <br>
+        {{titulo}}
+        <main class="main-container">
+        <form id="cadastroForm" action="" method="POST">
+            <div>
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+                <label for="descricao">Descrição</label>
+                <input type="text" id="descricao" name="descricao" required>
+            </div>
+            <button type="submit">Cadastrar</button>
+        </form>
+        </main>
+        <br>
+        {{> footer}}
+    </body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/jsonwebtoken"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        
+        document.getElementById("cadastroForm").addEventListener("submit", function(event){
+            event.preventDefault();
+
+            const nome = document.getElementById("nome").value;
+            const descricao = document.getElementById("descricao").value;
+            
+            const formData = {
+                nome: nome,
+                classe: classe,
+            };
+
+            axios.post("http://localhost:3001/habilidade/registrar", formData).then(function (response){
+                const data = response.data;
+                if(data.token){
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "http://localhost:3000/home";
+                } else {
+                    console.error(data.error);
+                }
+            }).catch(function (error){
+                console.error(error);
+            });
+        });
+    });
+</script>

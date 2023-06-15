@@ -1,33 +1,34 @@
 const express = require("express");
 const {Usuario, Personagem, Habilidade, Personagem_Habilidades} = require("../models");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 
 router.post("/registroAutomatico", async (req, res) => {
     try {
         const usuario1 = await Usuario.create({
             nome: "Gabriel",
             email: "gabriel@email.com",
-            senha: "G@briel123"
+            senha: await bcrypt.hash("G@briel123", 10)
         });
         const usuario2 = await Usuario.create({
             nome: "Sofia",
             email: "sofia@email.com",
-            senha: "Sofia#2023"
+            senha: await bcrypt.hash("Sofia#2023", 10)
         });
         const usuario3 = await Usuario.create({
             nome: "Lucas",
             email: "lucas@email.com",
-            senha: "Lc$9876"
+            senha: await bcrypt.hash("Lc$9876", 10)
         });
         const usuario4 = await Usuario.create({
             nome: "Isabella",
             email: "isabella@email.com",
-            senha: "Is@bella2023"
+            senha: await bcrypt.hash("Is@bella2023", 10)
         });
         const usuario5 = await Usuario.create({
             nome: "Matheus",
             email: "matheus@email.com",
-            senha: "M@theus456"           
+            senha: await bcrypt.hash("M@theus456", 10)         
         });
         const personagem1 = await Personagem.create({
             nome: "Aria Windrider",

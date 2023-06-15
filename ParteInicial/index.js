@@ -101,6 +101,74 @@ app.post('/contato', (req, res) => {
     });
 });
 
+
+//Usuários
+
+app.get("/cadastro", (req, res) => {
+    args = {
+        'titulo': "Página de Cadastro",
+        'header': 'D20',
+        'footer': 'Todos os direitos a um 10 reservados'
+    }
+
+    res.render("cadastroDeUsuario", args);
+});
+
+app.get("/home", (req, res) => {
+    args = {
+        'titulo': "Página Home",
+        'header': 'D20',
+        'footer': 'Todos os direitos a um 10 reservados'
+    }
+
+    res.render("home", args);
+});
+
+app.get("/perfil", (req, res) => {
+    args = {
+        'titulo': "Página de Perfil",
+        'header': 'D20',
+        'footer': 'Todos os direitos a um 10 reservados'
+    }
+
+    res.render("perfilDeUsuario", args);
+});
+
+//Personagens
+
+app.get("/cadastroPersonagem", (req, res) => {
+    args = {
+        'titulo': "Página de Cadastro do Personagem",
+        'header': 'D20',
+        'footer': 'Todos os direitos a um 10 reservados'
+    }
+
+    res.render("cadastroDeUsuarioPersonagem", args);
+});
+
+//Habilidades
+
+app.get("/cadastroHabilidade", (req, res) => {
+    args = {
+        'titulo': "Página de Cadastro de Habilidade",
+        'header': 'D20',
+        'footer': 'Todos os direitos a um 10 reservados'
+    }
+
+    res.render("cadastroDeUsuarioHabilidade", args);
+});
+//Personagem_Habilidades
+
+app.get("/cadastroPersonagemHabilidade", (req, res) => {
+    args = {
+        'titulo': "Página de Cadastro de Habilidade de Personagem",
+        'header': 'D20',
+        'footer': 'Todos os direitos a um 10 reservados'
+    }
+
+    res.render("cadastroDeUsuarioPersonagemHabilidade", args);
+});
+
 app.listen(port, () => {
     console.log("Servidor Iniciado");
 });

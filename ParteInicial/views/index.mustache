@@ -1,0 +1,69 @@
+<html>
+    <style>
+        .main-container {
+            height: 65vh;
+        }
+    </style>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        {{> header}}
+        <br>
+        {{titulo}}
+        <main class="main-container">
+            Um site para salvar informações das suas fichas de rpg
+            <br>
+            <form id="login-form" action="http://localhost:3001/usuarios/login" method="POST">
+                <div>
+                    <label for="email">E-mail</label>
+                    <input type="text" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <a href="/descricao">Descrição</a>
+            <br>
+            <a href="/tecnologia">Tecnologias</a>
+            <br>
+            <a href="/desenvolvedor">Desenvolvedor</a>
+            <br>
+            <a href="/contato">Contatos</a>
+            <br>
+            <a href="/cadastro">Cadastro</a>
+        </main>
+        <br>
+        {{> footer}}
+    </body>
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("login-form").addEventListener("submit", function(event){
+            event.preventDefault();
+            
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+
+            const formData = {
+                email: email,
+                senha: senha,
+            };
+
+            axios.post("http://localhost:3001/usuarios/login", formData).then(function (response){
+                const data = response.data;
+                if(data.token){
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "http://localhost:3000/home";
+                } else {
+                    console.error(data.error);
+                }
+            }).catch(function (error) {
+                console.error(error);
+            })
+        });
+    });
+</script>

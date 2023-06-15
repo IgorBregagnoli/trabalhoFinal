@@ -32,7 +32,27 @@ router.get("/:id", passport.authenticate("jwt", {session: false}), async (req, r
             error: "Erro ao obter usuário"
         });
     }
-})
+});
+
+router.get("/busca/perfil", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const usuario = await Usuario.findByPk(userId, {
+            attributes: ["id", "nome", "email"]
+        });
+        if (usuario) {
+            res.json(usuario.id);
+        } else {
+        res.status(404).json({
+            error: "Usuário não encontrado"
+        });
+        }
+    } catch (error) {
+        res.status(500).json({
+            error: "Erro ao obter perfil do usuário"
+        });
+    }
+});
 
 router.post("/registrar", async (req, res) => {
     const {nome, email, senha} = req.body;
@@ -40,7 +60,7 @@ router.post("/registrar", async (req, res) => {
         const usuario = await Usuario.create({
             nome,
             email,
-            senha
+            senha: await bcrypt.hash(senha, 10)
         });
         const token = jwt.sign({id: usuario.id}, "trabalhoFinal", {expiresIn: "1h"});
         res.json({usuario, token});
@@ -58,6 +78,12 @@ router.post("/login", async (req, res) => {
         const usuario = await Usuario.findOne({
             where: {email}
         });
+        if(!usuario){
+            res.status(401).json({
+                error: "Usuário não encontrado"
+            });
+            return;
+        }
         const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
         if(!senhaCorreta){
             res.status(401).json({

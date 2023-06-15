@@ -1,0 +1,36 @@
+<html>
+    <style>
+        .main-container {
+            height: 65vh;
+        }
+    </style>
+    <body>
+        {{> header}}
+        <br>
+        {{titulo}}
+        <main class="main-container">
+        Home
+        <br>
+        <a href="/perfil">Perfil</a>
+        <br>
+        <a href="/cadastroPersonagem">Personagem</a>
+        <br>
+        <a href="/cadastroHabilidade">Habilidade</a>
+        <br>
+        <a href="/cadastroPersonagemHabilidade">Habilidade de Personagem</a>
+        </main>
+        <br>
+        {{> footer}}
+    </body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/jsonwebtoken"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "/";
+        }
+    });
+</script>
